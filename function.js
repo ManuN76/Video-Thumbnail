@@ -31,17 +31,11 @@ function get_youtube_thumbnail(url, quality) {
   if (url) {
     var video_id, thumbnail, result;
 
-    if ((result = url.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/))) {
-      video_id = result.pop();
-    } else if ((result = url.match(/youtu.be\/(.{11})/))) {
-      video_id = result.pop();
-    } else if (
-      (result = url.match(
-        /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=))([\w\-]{10,12})\b/
-      )[1])
-    ) {
-      video_id = result;
-    }
+    result = url.match(
+      /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=))([\w\-]{10,12})\b/
+    );
+
+    video_id = result[1];
 
     if (video_id) {
       let quality_key = YTQuality[quality];
@@ -112,8 +106,11 @@ window.function = async function (url, ctime, imgw, imgh) {
   if (url == "") return;
 
   // Test if youtube
-  let yt = url.search("https://youtu");
-  if (yt > -1) {
+
+  if (
+    url.search("https://youtu") > -1 ||
+    url.search("https://www.youtu") > -1
+  ) {
     let dataURI3 = get_youtube_thumbnail(url, ctime);
     return dataURI3;
   }
